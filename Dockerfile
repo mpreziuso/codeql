@@ -56,6 +56,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
 
 FROM codeql_base AS java_codeql
 
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        maven && \
+    apt-get clean
+
 # Pre-compile our queries to save time later
 RUN codeql query compile --threads=0 ${CODEQL_HOME}/codeql-repo/java/ql/src/codeql-suites/*.qls
 
